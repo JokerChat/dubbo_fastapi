@@ -84,7 +84,7 @@ async def dubboInvoke(data: DubboInvokeBody):
             try:
                 response_data = json.loads(response_data)
             except Exception as e:
-                res_data = {'responseCode': 200, 'responseMsg': "请求成功"}
+                res_data = {'responseCode': 207, 'responseMsg': "dubbo接口请求异常"}
                 res_data.update({'responseData':response_data})
                 return res_data
             return response_data
