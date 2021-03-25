@@ -47,7 +47,7 @@ class BmDubbo():
             command_str = "invoke {0}.{1}()".format(
                 service_name, method_name)
         else:
-            command_str = "invoke {0}.{1}(11{2})".format(
+            command_str = "invoke {0}.{1}({2})".format(
                 service_name, method_name, arg)
         data = self.command(command_str)
         try:

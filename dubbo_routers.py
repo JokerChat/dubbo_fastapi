@@ -14,8 +14,7 @@ router = APIRouter()
 
 @router.post('/dubboList', name='dubbo列表接口')
 async def dubboList(data: DubboListBody):
-    host = data.url.split(":")[0]
-    port = data.url.split(":")[1]
+    host,port = data.url.split(":")
     service_name = data.serviceName
     method_name = data.methodName
     conn = BmDubbo(host, port)
@@ -52,8 +51,7 @@ async def dubboList(data: DubboListBody):
 
 @router.post('/dubbo', name='dubbo业务请求接口')
 async def dubboInvoke(data: DubboInvokeBody):
-    host = data.url.split(":")[0]
-    port = data.url.split(":")[1]
+    host,port = data.url.split(":")
     service_name = data.serviceName
     method_name = data.methodName
     boby = data.data
