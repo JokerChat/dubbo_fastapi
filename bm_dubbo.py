@@ -6,12 +6,14 @@
 #IDE            :PyCharm
 
 import telnetlib
-
 import json
-
 import re
+from kazoo.client import KazooClient
+from urllib import parse
+from config import ZK_CONFIG
 
-class BmDubbo():
+
+class BmDubbo(object):
 
     prompt = 'dubbo>'
 
@@ -21,7 +23,8 @@ class BmDubbo():
     def conn(self,host, port):
         conn = telnetlib.Telnet()
         try:
-            conn.open(host, port, timeout=1)
+            #3秒后 连接超时
+            conn.open(host, port, timeout=3)
         except BaseException:
             return False
         return conn
@@ -37,18 +40,7 @@ class BmDubbo():
             return False
 
     def invoke(self, service_name, method_name, arg):
-        if isinstance(arg, dict) and arg:
-            command_str = "invoke {0}.{1}({2})".format(
-                service_name, method_name, json.dumps(arg))
-        elif isinstance(arg, list) and arg:
-            command_str = "invoke {0}.{1}({2})".format(
-                service_name, method_name, json.dumps(arg))
-        elif isinstance(arg, dict) and not arg:
-            command_str = "invoke {0}.{1}()".format(
-                service_name, method_name)
-        else:
-            command_str = "invoke {0}.{1}({2})".format(
-                service_name, method_name, arg)
+        command_str = "invoke {0}.{1}({2})".format(service_name, method_name, arg)
         data = self.command(command_str)
         try:
             # 字节数据解码 utf8
@@ -105,8 +97,56 @@ class BmDubbo():
             return False
 
 
+class GetDubboService(object):
+    def __init__(self):
+
+        self.hosts = ZK_CONFIG
+        self.zk = self.zk_conn()
+
+    def zk_conn(self):
+        try:
+            zk = KazooClient(hosts=self.hosts, timeout=2)
+            zk.start(2)  # 与zookeeper连接
+        except BaseException as e:
+            print(str(e))
+            return False
+        return zk
+
+    def get_dubbo_info(self, dubbo_service):
+        dubbo_service_data = {}
+        try:
+            #先查出注册中心所有的dubbo服务
+            all_node = self.zk.get_children('/dubbo')
+            #根据传入服务名匹配对应的服务
+            node = [i for i in all_node if dubbo_service in i]
+            # 查询dubbo服务的详细信息
+            #遍历数据，过滤掉空数据
+            for i in node:
+                if self.zk.get_children(f'/dubbo/{i}/providers'):
+                    dubbo_data = self.zk.get_children(f'/dubbo/{i}/providers')
+            # 192.168. --- 是要过滤开发本地起的服务
+            data = [i for i in dubbo_data if "192.168." in i][0]
+            self.zk.stop()
+        except BaseException as e:
+            return dubbo_service_data
+        #parse.unquote 解码
+        #parse.urlparse 解析URL
+        #parse.query 获取查询参数
+        #parse.parse_qsl 返回列表
+        url_data = parse.urlparse(parse.unquote(data))
+        query_data = dict(parse.parse_qsl(url_data.query))
+        query_data['methods'] = query_data['methods'].split(",")
+        dubbo_service_data['url'] = url_data.netloc
+        dubbo_service_data['dubbo_service'] = dubbo_service
+        dubbo_service_data.update(query_data)
+        return dubbo_service_data
+
+
 
 if __name__ == '__main__':
-    conn = BmDubbo('ip地址', '端口')
-    data_ = conn.ls_invoke("服务名")
-    print(data_)
+    conn1 = GetDubboService()
+    if conn1.zk:
+        data = conn1.get_dubbo_info('xxx')
+        print(json.dumps(data))
+    else:
+        print("连接zk服务异常")

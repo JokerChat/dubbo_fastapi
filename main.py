@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from dubbo_routers import router
 app = FastAPI()
 
-app.include_router(router, prefix="/api", tags=["dubbo接口相关"])
+app.include_router(router, prefix="/api/dubbo", tags=["dubbo接口相关"])
 
 if __name__ == "__main__":
     #reload 修改后自动重载
