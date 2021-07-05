@@ -124,8 +124,14 @@ class GetDubboService(object):
             for i in node:
                 if self.zk.get_children(f'/dubbo/{i}/providers'):
                     dubbo_data = self.zk.get_children(f'/dubbo/{i}/providers')
-            # 192.168. --- 是要过滤开发本地起的服务
-            data = [i for i in dubbo_data if "192.168." in i][0]
+                    for index, a in enumerate(dubbo_data):
+                        url = parse.urlparse(parse.unquote(a)).netloc
+                        host, port = url.split(":")
+                        conn = BmDubbo(host, port)
+                        status = conn.command("")
+                        if status:
+                            data = dubbo_data[index]
+                            break
             self.zk.stop()
         except BaseException as e:
             return dubbo_service_data
