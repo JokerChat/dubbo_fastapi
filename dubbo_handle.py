@@ -115,6 +115,8 @@ class DubboHandle(object):
                             elif isinstance(boby, dict):
                                 boby.update({"class": param})
                                 boby = json.dumps(boby)
+                            else:
+                                return None, f"data请求参数有误,请检查！"
                         else:
                             return None, f"data请求参数有误,请检查！"
                         response_data = conn.invoke(service_name, method_name, boby)
