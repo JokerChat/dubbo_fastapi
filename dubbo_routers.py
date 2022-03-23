@@ -14,24 +14,29 @@ router = APIRouter()
 
 @router.post('/list', name='dubbo列表接口')
 async def dubboList(data: DubboListBody):
-    res_data, err = DubboHandle.list(data.serviceName, data.methodName)
-    if err:
-        return res_400(msg=err)
-    return res_200(data=res_data)
+    try:
+        res_data = DubboHandle.list(data.serviceName, data.methodName)
+        return res_200(data=res_data)
+    except Exception as e:
+        return res_400(msg=str(e))
+
+
 
 
 @router.post('/invoke', name='dubbo业务请求接口')
 async def dubboInvoke(data: DubboInvokeBody):
-    res_data, err = DubboHandle.invoke(data.serviceName, data.methodName, data.data)
-    if err:
-        return res_400(msg=err)
-    return res_200(data=res_data)
+    try:
+        res_data = DubboHandle.invoke(data.serviceName, data.methodName, data.data)
+        return res_data
+    except Exception as e:
+        return res_400(msg=str(e))
 
 
 @router.post('/search', name='dubbo服务搜索')
 async def dubboSearch(body: DubboSearchBody):
-    res_data, err = DubboHandle.search(body.serviceName)
-    if err:
-        return res_400(msg=err)
-    return res_200(data=res_data)
+    try:
+        res_data = DubboHandle.search(body.serviceName)
+        return res_200(data=res_data)
+    except Exception as e:
+        return res_400(msg=str(e))
 

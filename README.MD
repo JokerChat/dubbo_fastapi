@@ -21,8 +21,8 @@
 | 编号 | 修改日期 | 修改内容 | 修改人 |
 | ---- | -------- | -------- | ------ |
 | 1    | 2021-3-9 | 创建文档 | Fang   |
-|      |          |          |        |
-|      |          |          |        |
+| 2    | 2022-3-23 | 更新文档 |   Fang |
+|      |          |         |       |
 
 ### 服务地址
 
@@ -62,49 +62,28 @@
 
 **返回体**
 
-| 序号 | 键值         | 类型   | 说明                                                |
-| ---- | ------------ | ------ | :-------------------------------------------------- |
-| 1    | responseCode | Int    | 返回code                                            |
-| 2    | responseMsg  | String | 返回信息                                            |
-| 3    | responseData | Array  | data数组                                            |
-| 4    | - type       | int    | 0-枚举值，1-无需传参<br />2- 集合对象，3-自定义对象 |
-|      | - paramType  | string | 方法传值类型                                        |
-|      | - methodName | string | 方法名                                              |
+| 序号 | 键值         | 类型   | 说明         |
+| ---- | ------------ | ------ | :----------- |
+| 1    | responseCode | Int    | 返回code     |
+| 2    | responseMsg  | String | 返回信息     |
+| 3    | responseData | Array  | data数组     |
+| 4    | - param_type  | Array  | 方法传值类型 |
+|      | - method | String | 方法名       |
 
 **返回值示例（成功）**
 
 ```json
 {
-    "responseCode": 200,
-    "responseMsg": "请求成功",
-    "responseData": [
-        {
-            "methodName": "xxxxxx",
-            "paramType": "java.util.HashMap",
-            "type": 3
-        },
-        {
-            "methodName": "xxxxxx",
-            "paramType": [
-                "java.lang.String",
-                "java.lang.String",
-                "java.lang.String",
-                "java.lang.Integer",
-                "java.lang.Integer"
-            ],
-            "type": 0
-        },
-        {
-            "methodName": "xxxxxx",
-            "paramType": "",
-            "type": 1
-        },
-        {
-            "methodName": "xxxxxx",
-            "paramType": "java.util.List",
-            "type": 2
-        }
-    ]
+  "responseCode": 0,
+  "responseMsg": "请求成功",
+  "responseData": [
+    {
+      "method": "queryProductStoreInfo",
+      "param_type": [
+        "cn.com.xxxx.mallerp.dto.store.ProductStoreQueryRequest"
+      ]
+    }
+  ]
 }
 ```
 
@@ -140,30 +119,32 @@
 | 1    | url         | string | dubbo接口地址，IP:端口  |
 | 2    | serviceName | string | 服务名                  |
 | 3    | methodName  | string | 方法名                  |
-| 4    | data        | object | 传值4种情况，具体看示例 |
+| 4    | data        | object | 可看以下示例 |
 
 **请求体示例1 -- 原生对象或者自定义对象传参**(**xxDto、jsonObj、java.util.HashMap**)
 
 ```json
 {
-    "serviceName": "xxxxxx",
+    "serviceName": "cn.com.xxx.mallerp.api.xxxx.xxxx",
     "methodName": "xxxxxx",
-    "data": {        //data传入对应的对象数据,一般为json格式的
-        "productStoreQueryDTOS": [
-            {
-                "productNoNumDTOList": [
-                    {
-                        "num": 13,
-                        "productNo": "10000620"
-                    },
-                    {
-                        "num": 13,
-                        "productNo": "10000014"
-                    }
-                ],
-                "storeCode": "4401S1389"
-            }
-        ]
+    "data": {
+        "dto1": {
+            "productStoreQueryDTOS": [
+                {
+                    "productNoNumDTOList": [
+                        {
+                            "num": 13,
+                            "productNo": "10000620"
+                        },
+                        {
+                            "num": 13,
+                            "productNo": "10000014"
+                        }
+                    ],
+                    "storeCode": "4401S1389"
+                }
+            ]
+        }
     }
 }
 ```
@@ -205,7 +186,7 @@
 }
 ```
 
-**请求体示例5 --集合对象传参,后面跟着枚举值**(**java.util.List 、 java.lang.String 、 java.lang.Integer**)
+**请求体示例5 --集合对象传参,后面跟着枚举值**(**java.util.List 、 java.lang.String 、 java.lang.String**)
 
 ```json
 {
@@ -225,17 +206,17 @@
 {
     "serviceName": "xxxx",
     "methodName": "xxxxxx",
-    "data":[
-      {
-        "userCode": "7932723",
-        "startTime": "2021-04-16 13:30:00",
-        "endTime": "2021-04-16 14:30:00"
-},
-      {
-        "name": "fang",
-        "age": "20"
-}
-    ]
+    "data": {
+        "dto1": {
+            "userCode": "7932723",
+            "startTime": "2021-04-16 13:30:00",
+            "endTime": "2021-04-16 14:30:00"
+        },
+        "dto2": {
+            "name": "fang",
+            "age": "20"
+        }
+    }
 }
 ```
 
@@ -335,8 +316,3 @@
     "responseMsg": "相应的异常信息"
 }
 ```
-
-
-
-
-

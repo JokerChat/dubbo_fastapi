@@ -2,3 +2,4 @@ uvicorn
 pydantic
 fastapi
 kazoo
+dubborequests
