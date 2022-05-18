@@ -103,7 +103,7 @@
 **接口地址**
 
 - 说明：根据dubbo接口地址和dubbo接口服务名，方法名，参数值实现dubbo接口逻辑
-- 地址：`/api/invoke`
+- 地址：`/api/dubbo/invoke`
 - 方法：`POST`
 
 **请求头**
@@ -116,10 +116,9 @@
 
 | 序号 | 键值        | 类型   | 说明                    |
 | ---- | ----------- | ------ | ----------------------- |
-| 1    | url         | string | dubbo接口地址，IP:端口  |
-| 2    | serviceName | string | 服务名                  |
-| 3    | methodName  | string | 方法名                  |
-| 4    | data        | object | 可看以下示例 |
+| 1    | serviceName | string | 服务名                  |
+| 2    | methodName  | string | 方法名                  |
+| 3    | data        | object | 可看以下示例 |
 
 **请求体示例1 -- 原生对象或者自定义对象传参**(**xxDto、jsonObj、java.util.HashMap**)
 
