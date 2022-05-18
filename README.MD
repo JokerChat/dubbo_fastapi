@@ -2,7 +2,7 @@
 - pip install requirements.txt
 - config.py 文件配置上你的zookeeper地址
 - 右键运行main文件
-- 访问http://127.0.0.1:5000/api/xxx 即可开始测试dubbo接口
+- 访问http://127.0.0.1:5000/api/dubbo/xxx 即可开始测试dubbo接口
 - 具体传参可看下面的dubbo接口文档
 - 基于fastapi,将dubbo接口转换成便捷的http接口测试
 - dockerFile部署,直接`docker build -t xx:xx .`
