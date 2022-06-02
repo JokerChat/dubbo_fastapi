@@ -315,3 +315,71 @@
     "responseMsg": "相应的异常信息"
 }
 ```
+
+ ### 4）通过ip+端口查询服务名下的所有方法
+
+**接口地址**
+
+- 说明：根据dubbo接口地址和dubbo接口服务名，查询服务名下的所有方法
+- 地址：`/api/dubbo/telnet/list`
+- 方法：`POST`
+
+**请求头**
+
+| 序号 | 类型         | 值               | 说明      |
+| ---- | ------------ | ---------------- | --------- |
+| 1    | Content-Type | application/json | JSON 格式 |
+
+**请求体**
+
+| 序号 | 键值        | 类型   | 说明                                                 |
+| ---- | ----------- | ------ | ---------------------------------------------------- |
+| 1    | serviceName | String | 服务名                                               |
+| 2    | methodName  | String | 非必传，查询服务名下指定方法名的传值类型，不传查所有 |
+| 3    | url | String | ip+端口，格式为"192.168.242.72:30912"                                               |
+
+**请求体示例**
+
+```json
+{
+   "url": "192.168.242.72:30912",
+  "serviceName": "string",
+  "methodName": "string"
+}
+```
+
+**返回体**
+
+| 序号 | 键值         | 类型   | 说明         |
+| ---- | ------------ | ------ | :----------- |
+| 1    | responseCode | Int    | 返回code     |
+| 2    | responseMsg  | String | 返回信息     |
+| 3    | responseData | Array  | data数组     |
+| 4    | - param_type  | Array  | 方法传值类型 |
+|      | - method | String | 方法名       |
+
+**返回值示例（成功）**
+
+```json
+{
+  "responseCode": 0,
+  "responseMsg": "请求成功",
+  "responseData": [
+    {
+      "method": "queryProductStoreInfo",
+      "param_type": [
+        "cn.com.xxxx.mallerp.dto.store.ProductStoreQueryRequest"
+      ]
+    }
+  ]
+}
+```
+
+**返回值示例（失败）**
+
+```json
+{
+    "responseCode": 400,
+    "responseMsg": "相应的异常信息"
+}
+```

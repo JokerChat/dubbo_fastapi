@@ -30,3 +30,9 @@ class DubboHandle(object):
         return res_data['invoke_data']
 
 
+    @staticmethod
+    def telnet_list(ip, port, service_name, method_name=None):
+        list_data = dubborequests.telnet_list(ip, port, service_name, method_name)
+        return list_data
+
+

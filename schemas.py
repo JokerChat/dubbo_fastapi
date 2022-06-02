@@ -20,6 +20,15 @@ class DubboListBody(BaseModel):
             raise ValueError('必须有值')
         return value
 
+class DubboTelnetListBody(DubboListBody):
+    url :str=Field(..., title="dubbo服务实际地址",description="ip:端口格式")
+
+    @validator('url')
+    def checkEmpty(cls,value):
+        if value =='':
+            raise ValueError('必须有值')
+        return value
+
 
 
 #继承DubboListBody模型，提高复用性

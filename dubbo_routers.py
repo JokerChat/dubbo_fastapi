@@ -6,7 +6,7 @@
 '''
 
 from fastapi import APIRouter
-from schemas import DubboListBody, DubboInvokeBody,DubboSearchBody
+from schemas import DubboListBody, DubboInvokeBody,DubboSearchBody, DubboTelnetListBody
 from dubbo_handle import DubboHandle
 from ResponseNormal import res_200,res_400
 
@@ -20,7 +20,14 @@ async def dubboList(data: DubboListBody):
     except Exception as e:
         return res_400(msg=str(e))
 
-
+@router.post('/telnet/list', name='dubbo列表接口-telnet直连')
+async def dubboList(data: DubboTelnetListBody):
+    try:
+        ip, port = data.url.split(':')
+        res_data = DubboHandle.telnet_list(ip, port, data.serviceName, data.methodName)
+        return res_200(data=res_data)
+    except Exception as e:
+        return res_400(msg=str(e))
 
 
 @router.post('/invoke', name='dubbo业务请求接口')
