@@ -15,18 +15,18 @@ class DubboHandle(object):
     Config.zookeeper_url_list = ZK_CONFIG
 
     @staticmethod
-    def search(service_name):
-        service_info = dubborequests.search(service_name)
+    def search(service_name, version=None):
+        service_info = dubborequests.search(service_name, version)
         return service_info
 
     @staticmethod
-    def list(service_name, method_name=None):
-        list_data = dubborequests.list(service_name, method_name)
+    def list(service_name, method_name=None, version=None):
+        list_data = dubborequests.list(service_name, method_name, version)
         return list_data
 
     @staticmethod
-    def invoke(service_name, method_name, data):
-        res_data = dubborequests.zk_invoke(service_name, method_name, data)
+    def invoke(service_name, method_name, data, version=None):
+        res_data = dubborequests.zk_invoke(service_name, method_name, data, version)
         return res_data['invoke_data']
 
 

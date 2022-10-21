@@ -14,6 +14,7 @@ from typing import Union
 class DubboListBody(BaseModel):
     serviceName :str=Field(..., title="dubbo接口服务名",description="必传")
     methodName :str=Field(None, title="dubbo接口方法名",description="不传方法名查全部，否则查对应方法名下的传值类型")
+    version: str = Field(None, title="dubbo服务版本号", description="非必传，传值时查询指定版本号的服务")
     @validator('serviceName')
     def checkEmpty(cls,value):
         if value =='':
@@ -43,7 +44,8 @@ class DubboInvokeBody(DubboListBody):
 
 class DubboSearchBody(BaseModel):
     serviceName :str=Field(..., title="dubbo服务名",description="必传")
-    @validator('serviceName')
+    version: str = Field(None, title="dubbo服务版本号",description="非必传，传值时查询指定版本号的服务")
+    @validator('serviceName', 'version')
     def checkEmpty(cls,value):
         if value =='':
             raise ValueError('必须有值')
